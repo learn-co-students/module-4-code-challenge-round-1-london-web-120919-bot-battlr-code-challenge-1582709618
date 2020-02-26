@@ -1,11 +1,14 @@
 import React from 'react';
 import BotCollection from './BotCollection';
 import YourBotArmy from './YourBotArmy';
+import BotSpecs from '../components/BotSpecs';
 
 class BotsPage extends React.Component {
 	state = {
 		bots: [],
-		myBots: []
+		myBots: [],
+		showPage: false,
+		selectedBot: null
 	};
 
 	componentDidMount() {
@@ -27,7 +30,8 @@ class BotsPage extends React.Component {
 
 		if (!myBots.includes(id)) {
 			this.setState({
-				myBots: [...myBots, id]
+				myBots: [...myBots, id],
+				showPage: false
 			});
 		}
 	};
@@ -45,16 +49,53 @@ class BotsPage extends React.Component {
 
 		return bots.filter(bot => myBots.includes(bot.id));
 	};
+
+	showBot = id => {
+		const { bots } = this.state;
+
+		this.setState({
+			showPage: true,
+			selectedBot: bots.find(bot => bot.id === id)
+		});
+	};
+
+	showPageToggle = () => {
+		this.setState({
+			showPage: false
+		});
+	};
 	//start here with your code for step one
 
 	render() {
-		const { bots } = this.state;
-		return (
-			<div>
-				<YourBotArmy removeBots={this.removeBots} myBots={this.myBotsFind()} />
-				<BotCollection bots={bots} addBots={this.addBots} />
-			</div>
-		);
+		const { bots, showPage, selectedBot } = this.state;
+
+		{
+			if (showPage) {
+				return (
+					<div>
+						<YourBotArmy
+							removeBots={this.removeBots}
+							myBots={this.myBotsFind()}
+						/>
+						<BotSpecs
+							bot={selectedBot}
+							addBots={this.addBots}
+							showPageToggle={this.showPageToggle}
+						/>
+					</div>
+				);
+			} else {
+				return (
+					<div>
+						<YourBotArmy
+							removeBots={this.removeBots}
+							myBots={this.myBotsFind()}
+						/>
+						<BotCollection bots={bots} showBot={this.showBot} />
+					</div>
+				);
+			}
+		}
 	}
 }
 

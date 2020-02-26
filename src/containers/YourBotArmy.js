@@ -4,7 +4,7 @@ import BotCard from '../components/BotCard';
 class YourBotArmy extends React.Component {
 	renderBotCards = (myBots, removeBots) =>
 		myBots.map(bot => {
-			return <BotCard bot={bot} moveBots={removeBots} />;
+			return <BotCard bot={bot} showBot={removeBots} />;
 		});
 
 	render() {
